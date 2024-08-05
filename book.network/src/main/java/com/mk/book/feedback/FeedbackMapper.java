@@ -1,9 +1,10 @@
 package com.mk.book.feedback;
 
 import com.mk.book.book.Book;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-
+@Service
 public class FeedbackMapper {
 
     public Feedback toFeedback(FeedbackRequest request) {
