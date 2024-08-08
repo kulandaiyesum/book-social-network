@@ -1,3 +1,4 @@
+import { TokenService } from './../../services/token/token.service';
 import { Component, inject } from '@angular/core';
 import { AuthenticationRequest } from '../../services/models';
 import { FormsModule } from '@angular/forms';
@@ -16,8 +17,25 @@ export class LoginComponent {
   errorMsg: Array<string> = [];
   router = inject(Router);
   authServerce = inject(AuthenticationService);
+  tokenService =inject(TokenService)
 
-  login() {}
+  login() {
+    this.errorMsg = [];
+    this.authServerce.authenticate({ body: this.authRequest }).subscribe({
+      next: (res) => {
+        this.tokenService.token = res.token as string;
+        this.router.navigate(['books']);
+      },
+      error: (err) => {
+        console.log(err);
+        if (err.error.validationErrors) {
+          this.errorMsg = err.error.validationErrors;
+        } else {
+          this.errorMsg.push(err.error.error);
+        }
+      },
+    });
+  }
   register() {
     this.router.navigate(['register']);
   }
